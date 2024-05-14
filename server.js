@@ -1,8 +1,8 @@
 // Importacion
 const express = require('express');
 const fs = require('fs');
-const uuid = require('uuid');
-const { obtenerRoommate } = require('./funcion.js');
+const { postRoommate, getRoommates, putCuentas } = require('./roommates.js');
+const { getGastos, postGasto } = require('./gastos.js');
 // Instancia de express
 const app = express();
 const PORT = 3000;
@@ -10,7 +10,6 @@ const PORT = 3000;
 // Middleware para enviar respuestas json
 app.use(express.json());
 
-const cRoommates = __dirname + '/data/roommates.json';
 const cGastos = __dirname + '/data/gastos.json';
 //1. Devolver el documento HTML disponible
 app.get("/", (req, res) => {
@@ -23,10 +22,10 @@ app.get("/", (req, res) => {
 });
 
 //2. Devolver a todos los roommates almacenados en roommates.json
-app.get('/roommates', (req, res) => {
+app.get('/roommates', async (req, res) => {
     try {
-        const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
-        return res.status(200).send(roommatesJSON);
+        const respuesta = await getRoommates();
+        return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
         return res.status(500).send("Error interno del servidor: " + error.message);
@@ -36,16 +35,9 @@ app.get('/roommates', (req, res) => {
 //3. Almacenar un nuevo roommate en roommates.json ocupando randomUser
 app.post('/roommate', async (req, res) => {
     try {
-        const roommate = await obtenerRoommate();
-        const debe = 10000;
-        const recibe = 20000;
-        const total = 10000;
-        const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe, recibe, total };
-        const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
-        roommatesJSON.roommates.push(nuevoRoommate);
-        // Escribir el archivo JSON con la agregacion realizada
-        fs.writeFileSync(cRoommates, JSON.stringify(roommatesJSON));
-        return res.status(201).send(roommatesJSON);
+        const respuesta = await postRoommate();
+        await putCuentas();
+        return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
         return res.status(500).send("Error interno del servidor: " + error.message);
@@ -53,10 +45,10 @@ app.post('/roommate', async (req, res) => {
 });
 
 //4. Devolver el historial con todos los gastos registrados en gastos.json
-app.get('/gastos', (req, res) => {
+app.get('/gastos', async (req, res) => {
     try {
-        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
-        return res.status(200).send(gastosJSON);
+        const respuesta = await getGastos();
+        return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
         return res.status(500).send("Error interno del servidor: " + error.message);
@@ -64,22 +56,17 @@ app.get('/gastos', (req, res) => {
 });
 
 //5. Almacenar un nuevo gasto en gastos.json
-app.post('/gasto', (req, res) => {
+app.post('/gasto', async (req, res) => {
     try {
         const { roommate, descripcion, monto } = req.body;
-
         // Verificar si se proporcionan los datos del req.body
         if (!roommate || !descripcion || !monto) {
             return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
         }
 
-        const nuevogasto = { id: uuid.v4().slice(30), roommate, descripcion, monto };
-        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
-        gastosJSON.gastos.push(nuevogasto);
-        // Escribir el archivo JSON con la agregacion realizada
-        fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
-
-        return res.status(201).send(gastosJSON);
+        const respuesta = await postGasto(roommate, descripcion, monto);
+        await putCuentas();
+        return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
         return res.status(500).send("Error interno del servidor: " + error.message);
@@ -87,7 +74,7 @@ app.post('/gasto', (req, res) => {
 });
 
 //6. Modifica los datos almacenados en gastos.json
-app.put('/gasto', (req, res) => {
+app.put('/gasto', async (req, res) => {
     try {
         const { id } = req.query;
         const { roommate, descripcion, monto } = req.body;
@@ -105,7 +92,7 @@ app.put('/gasto', (req, res) => {
         const gastos = gastosJSON.gastos;
 
         // Verificar si el gasto con el id proporcionado existe
-        const buscarId = gastos.findIndex(g => g.id === id);
+        const buscarId = gastos.findIndex(g => g.id == id);
         if (buscarId == -1) {
             console.log("Gasto no encontrado");
             return res.status(404).send("Gasto no encontrado");
@@ -124,7 +111,7 @@ app.put('/gasto', (req, res) => {
 });
 
 //7. Elimina un gasto segun su id en gastos.json
-app.delete('/gasto', (req, res) => {
+app.delete('/gasto', async (req, res) => {
     try {
         const { id } = req.query;
         // Verificar si se proporciono el id
