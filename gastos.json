@@ -1,1 +1,40 @@
-{"gastos":[{"id":"34d419","roommate":"Danicsa Calderon","descripcion":"Articulos de limpieza","monto":45000},{"id":"d720fb","roommate":"Matthew Ma","descripcion":"Articulos de limpieza","monto":25000},{"id":"73c385","roommate":"Lilly Morris","descripcion":"Comida","monto":15000}]}
+{
+    "gastos": [
+        {
+            "id": "34d419",
+            "roommate": "Danicsa Calderon",
+            "descripcion": "Articulos de limpieza",
+            "monto": 45000
+        },
+        {
+            "id": "73c385",
+            "roommate": "Lilly Morris",
+            "descripcion": "Comida",
+            "monto": 10000
+        },
+        {
+            "id": "82e3dd",
+            "roommate": "Ugo Dupuis",
+            "descripcion": "Comida 2",
+            "monto": 15000
+        },
+        {
+            "id": "c78a5d",
+            "roommate": "Magnus Jensen",
+            "descripcion": "Articulos de limpieza",
+            "monto": 25000
+        },
+        {
+            "id": "600abd",
+            "roommate": "Naydena Shahray",
+            "descripcion": "Articulos de limpieza",
+            "monto": 24000
+        },
+        {
+            "id": "ac7946",
+            "roommate": "Anh Snoeck",
+            "descripcion": "Articulos de limpieza 2",
+            "monto": 21000
+        }
+    ]
+}
