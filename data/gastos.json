@@ -13,16 +13,10 @@
             "monto": 10000
         },
         {
-            "id": "82e3dd",
-            "roommate": "Ugo Dupuis",
-            "descripcion": "Comida 2",
-            "monto": 15000
-        },
-        {
             "id": "c78a5d",
             "roommate": "Magnus Jensen",
-            "descripcion": "Articulos de limpieza",
-            "monto": 25000
+            "descripcion": "Articulos de limpieza 2",
+            "monto": 50000
         },
         {
             "id": "600abd",
@@ -35,6 +29,12 @@
             "roommate": "Anh Snoeck",
             "descripcion": "Articulos de limpieza 2",
             "monto": 21000
+        },
+        {
+            "id": "2dfe06",
+            "roommate": "Leila Høivik",
+            "descripcion": "Articulos de limpieza",
+            "monto": 15000
         }
     ]
 }

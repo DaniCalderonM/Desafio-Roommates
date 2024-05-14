@@ -56,6 +56,13 @@
             "debe": 10000,
             "recibe": 20000,
             "total": 10000
+        },
+        {
+            "id": "cdfd00",
+            "nombre": "Leila Høivik",
+            "debe": 10000,
+            "recibe": 20000,
+            "total": 10000
         }
     ]
 }

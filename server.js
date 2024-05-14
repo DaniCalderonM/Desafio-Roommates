@@ -10,6 +10,8 @@ const PORT = 3000;
 // Middleware para enviar respuestas json
 app.use(express.json());
 
+const cRoommates = __dirname + '/data/roommates.json';
+const cGastos = __dirname + '/data/gastos.json';
 //1. Devolver el documento HTML disponible
 app.get("/", (req, res) => {
     try {
@@ -23,7 +25,7 @@ app.get("/", (req, res) => {
 //2. Devolver a todos los roommates almacenados en roommates.json
 app.get('/roommates', (req, res) => {
     try {
-        const roommatesJSON = JSON.parse(fs.readFileSync("roommates.json", "utf8"));
+        const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
         return res.status(200).send(roommatesJSON);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -39,10 +41,10 @@ app.post('/roommate', async (req, res) => {
         const recibe = 20000;
         const total = 10000;
         const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe, recibe, total };
-        const roommatesJSON = JSON.parse(fs.readFileSync("roommates.json", "utf8"));
+        const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
         roommatesJSON.roommates.push(nuevoRoommate);
         // Escribir el archivo JSON con la agregacion realizada
-        fs.writeFileSync("roommates.json", JSON.stringify(roommatesJSON));
+        fs.writeFileSync(cRoommates, JSON.stringify(roommatesJSON));
         return res.status(201).send(roommatesJSON);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -53,7 +55,7 @@ app.post('/roommate', async (req, res) => {
 //4. Devolver el historial con todos los gastos registrados en gastos.json
 app.get('/gastos', (req, res) => {
     try {
-        const gastosJSON = JSON.parse(fs.readFileSync("gastos.json", "utf8"));
+        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
         return res.status(200).send(gastosJSON);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -72,10 +74,10 @@ app.post('/gasto', (req, res) => {
         }
 
         const nuevogasto = { id: uuid.v4().slice(30), roommate, descripcion, monto };
-        const gastosJSON = JSON.parse(fs.readFileSync("gastos.json", "utf8"));
+        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
         gastosJSON.gastos.push(nuevogasto);
         // Escribir el archivo JSON con la agregacion realizada
-        fs.writeFileSync("gastos.json", JSON.stringify(gastosJSON));
+        fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
 
         return res.status(201).send(gastosJSON);
     } catch (error) {
@@ -99,7 +101,7 @@ app.put('/gasto', (req, res) => {
             return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
         }
 
-        const gastosJSON = JSON.parse(fs.readFileSync("gastos.json", "utf8"));
+        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
         const gastos = gastosJSON.gastos;
 
         // Verificar si el gasto con el id proporcionado existe
@@ -111,7 +113,7 @@ app.put('/gasto', (req, res) => {
             // Actualizar los datos del gasto
             gastos[buscarId] = { id, roommate, descripcion, monto };
             // Escribir el archivo JSON con la modificacion realizada
-            fs.writeFileSync("gastos.json", JSON.stringify(gastosJSON));
+            fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
             console.log("Datos actualizados correctamente:", gastos[buscarId]);
             return res.status(200).send(gastosJSON);
         }
@@ -129,7 +131,7 @@ app.delete('/gasto', (req, res) => {
         if (!id) {
             return res.status(400).send("Debe proporcionar un ID");
         }
-        const gastosJSON = JSON.parse(fs.readFileSync("gastos.json", "utf8"));
+        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
         const gastos = gastosJSON.gastos;
         // Verificar si el gasto con el id proporcionado existe
         const buscarId = gastos.findIndex(g => g.id == id);
@@ -139,7 +141,7 @@ app.delete('/gasto', (req, res) => {
         // Eliminar el gasto del arreglo
         gastosJSON.gastos = gastos.filter((g) => g.id !== id);
         // Escribir el archivo JSON con la eliminacion realizada
-        fs.writeFileSync("gastos.json", JSON.stringify(gastosJSON));
+        fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
         return res.status(200).send(gastosJSON);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
