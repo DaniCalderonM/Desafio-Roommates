@@ -18,10 +18,7 @@ const obtenerRoommate = async () => {
 
 const postRoommate = async () => {
     const roommate = await obtenerRoommate();
-    let debe = 0;
-    let recibe = 0;
-    let total = 0;
-    const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe, recibe, total };
+    const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe: 0, recibe: 0, total: 0 };
     const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
     roommatesJSON.roommates.push(nuevoRoommate);
     // Escribir el archivo JSON con la agregacion realizada
@@ -36,7 +33,7 @@ const getRoommates = async () => {
 
 const putCuentas = async () => {
     try {
-        // Obtener roommates y gastos
+        // Obtener a los roommates y los gastos
         const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
         const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
         const roommates = roommatesJSON.roommates;
@@ -48,11 +45,11 @@ const putCuentas = async () => {
             roommate.recibe = 0;
         });
 
-        // Calcular nuevas cuentas
+        // Calcular nuevos gastos
         gastos.forEach(gasto => {
             const montoPorRoommate = gasto.monto / roommates.length;
             roommates.forEach(roommate => {
-                if (roommate.nombre === gasto.roommate) {
+                if (roommate.nombre == gasto.roommate) {
                     roommate.recibe += montoPorRoommate;
                 } else {
                     roommate.debe += montoPorRoommate;

@@ -101,6 +101,8 @@ app.put('/gasto', async (req, res) => {
             gastos[buscarId] = { id, roommate, descripcion, monto };
             // Escribir el archivo JSON con la modificacion realizada
             fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
+            // Se llama a la funcion para actualizar las cuentas
+            await putCuentas();
             console.log("Datos actualizados correctamente:", gastos[buscarId]);
             return res.status(200).send(gastosJSON);
         }
@@ -129,6 +131,8 @@ app.delete('/gasto', async (req, res) => {
         gastosJSON.gastos = gastos.filter((g) => g.id !== id);
         // Escribir el archivo JSON con la eliminacion realizada
         fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
+        // Se llama a la funcion para actualizar las cuentas
+        await putCuentas();
         return res.status(200).send(gastosJSON);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
