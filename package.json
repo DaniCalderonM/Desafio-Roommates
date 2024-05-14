@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Danicsa Calderón",
   "license": "ISC",
   "description": "",
   "dependencies": {

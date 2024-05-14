@@ -1,4 +1,1 @@
-{
-    "roommates": [
-    ]
-}
+{"roommates":[{"id":"dfrerd","nombre":"Danicsa Calderon","email":"mesiasd.calderon@gmail.com","debe":20000,"recibe":15000,"total":35000},{"id":"c1db87","nombre":"Estela Gaytán","debe":10000,"recibe":20000,"total":10000},{"id":"24907e","nombre":"Matthew Ma","debe":10000,"recibe":20000,"total":10000},{"id":"9532ea","nombre":"Naydena Shahray","debe":10000,"recibe":20000,"total":10000},{"id":"afe636","nombre":"Lilly Morris","debe":10000,"recibe":20000,"total":10000}]}
