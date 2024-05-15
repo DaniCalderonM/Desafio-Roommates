@@ -60,6 +60,7 @@ proceso.(3 Puntos)
 PD: Para el punto de recalcular y actualizar las cuentas de los roommates,
 la modalidad es que cuando se agrega un nuevo gasto este se divide entre todos los roommates 
 existentes y si se añade uno nuevo, a este tambien se le agrega al "debe" el valor correspondiente.
+
 5. Devolver los códigos de estado HTTP correspondientes a cada situación.
 (1 Punto)
 
