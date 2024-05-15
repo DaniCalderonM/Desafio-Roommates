@@ -15,18 +15,18 @@ const obtenerRoommate = async () => {
     }
 }
 
-const getRoommates = async () => {
-    const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
-    return roommatesJSON;
-}
-
 const postRoommate = async () => {
     const roommate = await obtenerRoommate();
     const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe: 0, recibe: 0, total: 0 };
-    const roommatesJSON = getRoommates();
+    const roommatesJSON = await getRoommates();
     roommatesJSON.roommates.push(nuevoRoommate);
     // Escribir el archivo JSON con la agregacion realizada
     fs.writeFileSync(cRoommates, JSON.stringify(roommatesJSON));
+    return roommatesJSON;
+}
+
+const getRoommates = async () => {
+    const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
     return roommatesJSON;
 }
 
