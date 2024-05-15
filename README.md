@@ -10,11 +10,17 @@ de gastos entre roommates.
 Además deberás servir una API REST que permita hacer lo siguiente:
 
 ● Almacenar roommates nuevos ocupando random user.
+
 ● Devolver todos los roommates almacenados.
+
 ● Registrar nuevos gastos.
+
 ● Devolver el historial de gastos registrados.
+
 ● Modificar la información correspondiente a un gasto.
+
 ● Eliminar gastos del historial.
+
 
 ## Requerimientos
 1. Ocupar el módulo File System para la manipulación de archivos alojados en el
@@ -32,23 +38,31 @@ El objeto correspondiente al usuario que se almacenará debe tener un id generad
 el paquete UUID.
 (2 Puntos)
 4. Crear una API REST que contenga las siguientes rutas:
+
 a. GET /gastos: Devuelve todos los gastos almacenados en el archivo
 gastos.json.
+
 b. POST /gasto: Recibe el payload con los datos del gasto y los almacena en un
 archivo JSON (gastos.json).
+
 c. PUT /gasto: Recibe el payload de la consulta y modifica los datos
 almacenados en el servidor (gastos.json).
+
 d. DELETE /gasto: Recibe el id del gasto usando las Query Strings y la elimine del
 historial de gastos (gastos.json).
+
 e. GET /roommates: Devuelve todos los roommates almacenados en el servidor
 (roommates.json)
+
 Se debe considerar recalcular y actualizar las cuentas de los roommates luego de este
 proceso.(3 Puntos)
+
 PD: Para el punto de recalcular y actualizar las cuentas de los roommates,
 la modalidad es que cuando se agrega un nuevo gasto este se divide entre todos los roommates 
 existentes y si se añade uno nuevo, a este tambien se le agrega al "debe" el valor correspondiente.
 5. Devolver los códigos de estado HTTP correspondientes a cada situación.
 (1 Punto)
+
 
 ## Instalación 🔧
 1. Clona este repositorio.
@@ -71,5 +85,4 @@ existentes y si se añade uno nuevo, a este tambien se le agrega al "debe" el va
 
 ## Autor
 - Danicsa Calderón - [GitHub](https://github.com/DaniCalderonM)
-- 
 - ![7440210cfa7f959af99fb330c50127d5](https://github.com/DaniCalderonM/Desafio-Roommates/assets/128839529/f77df248-e6d6-4b6c-928d-3ca174bd7076)
