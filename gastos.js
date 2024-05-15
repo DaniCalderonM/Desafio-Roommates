@@ -15,4 +15,8 @@ const postGasto = async ( roommate, descripcion, monto) => {
     fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
 }
 
-module.exports = { getGastos, postGasto };
+const buscarPorId = (gastos, id) => {
+    return gastos.findIndex(g => g.id == id);
+};
+
+module.exports = { getGastos, postGasto, buscarPorId };

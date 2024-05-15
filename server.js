@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const { postRoommate, getRoommates, putCuentas } = require('./roommates.js');
-const { getGastos, postGasto } = require('./gastos.js');
+const { getGastos, postGasto, buscarPorId } = require('./gastos.js');
 // Instancia de express
 const app = express();
 const PORT = 3000;
@@ -36,6 +36,7 @@ app.get('/roommates', async (req, res) => {
 app.post('/roommate', async (req, res) => {
     try {
         const respuesta = await postRoommate();
+        // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
         return res.status(201).send(respuesta);
     } catch (error) {
@@ -65,6 +66,7 @@ app.post('/gasto', async (req, res) => {
         }
 
         const respuesta = await postGasto(roommate, descripcion, monto);
+        // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
         return res.status(201).send(respuesta);
     } catch (error) {
@@ -88,11 +90,11 @@ app.put('/gasto', async (req, res) => {
             return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
         }
 
-        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
-        const gastos = gastosJSON.gastos;
+        const resultado = await getGastos();
+        const gastos = resultado.gastos;
 
         // Verificar si el gasto con el id proporcionado existe
-        const buscarId = gastos.findIndex(g => g.id == id);
+        const buscarId = buscarPorId(gastos, id)
         if (buscarId == -1) {
             console.log("Gasto no encontrado");
             return res.status(404).send("Gasto no encontrado");
@@ -100,11 +102,11 @@ app.put('/gasto', async (req, res) => {
             // Actualizar los datos del gasto
             gastos[buscarId] = { id, roommate, descripcion, monto };
             // Escribir el archivo JSON con la modificacion realizada
-            fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
+            fs.writeFileSync(cGastos, JSON.stringify(resultado));
             // Se llama a la funcion para actualizar las cuentas
             await putCuentas();
             console.log("Datos actualizados correctamente:", gastos[buscarId]);
-            return res.status(200).send(gastosJSON);
+            return res.status(200).send(resultado);
         }
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -120,20 +122,20 @@ app.delete('/gasto', async (req, res) => {
         if (!id) {
             return res.status(400).send("Debe proporcionar un ID");
         }
-        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
-        const gastos = gastosJSON.gastos;
+        const resultado = await getGastos();
+        const gastos = resultado.gastos;
         // Verificar si el gasto con el id proporcionado existe
-        const buscarId = gastos.findIndex(g => g.id == id);
+        const buscarId = buscarPorId(gastos, id)
         if (buscarId == -1) {
             return res.status(404).send("El gasto con el ID proporcionado no existe");
         }
         // Eliminar el gasto del arreglo
-        gastosJSON.gastos = gastos.filter((g) => g.id !== id);
+        resultado.gastos = gastos.filter((g) => g.id !== id);
         // Escribir el archivo JSON con la eliminacion realizada
-        fs.writeFileSync(cGastos, JSON.stringify(gastosJSON));
+        fs.writeFileSync(cGastos, JSON.stringify(resultado));
         // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
-        return res.status(200).send(gastosJSON);
+        return res.status(200).send(resultado);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
         return res.status(500).send("Error interno del servidor: " + error.message);
