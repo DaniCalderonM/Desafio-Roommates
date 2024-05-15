@@ -86,4 +86,5 @@ existentes y si se añade uno nuevo, a este tambien se le agrega al "debe" el va
 
 ## Autor
 - Danicsa Calderón - [GitHub](https://github.com/DaniCalderonM)
-- ![7440210cfa7f959af99fb330c50127d5](https://github.com/DaniCalderonM/Desafio-Roommates/assets/128839529/f77df248-e6d6-4b6c-928d-3ca174bd7076)
+
+![7440210cfa7f959af99fb330c50127d5](https://github.com/DaniCalderonM/Desafio-Roommates/assets/128839529/f77df248-e6d6-4b6c-928d-3ca174bd7076)
