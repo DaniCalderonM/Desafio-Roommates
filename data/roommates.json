@@ -1,1 +1,33 @@
-{"roommates":[{"id":"dfrerd","nombre":"Danicsa Calderon","email":"mesiasd.calderon@gmail.com","debe":11250,"recibe":3750,"total":-7500},{"id":"c1db87","nombre":"Estela Gaytán","debe":15000,"recibe":0,"total":-15000},{"id":"24907e","nombre":"Matthew Ma","debe":10000,"recibe":5000,"total":-5000},{"id":"ad3221","nombre":"Patricia Obrien","debe":8750,"recibe":6250,"total":-2500}]}
+{
+    "roommates": [
+        {
+            "id": "dfrerd",
+            "nombre": "Danicsa Calderon",
+            "email": "mesiasd.calderon@gmail.com",
+            "debe": 0,
+            "recibe": 0,
+            "total": 0
+        },
+        {
+            "id": "c1db87",
+            "nombre": "Estela Gaytán",
+            "debe": 0,
+            "recibe": 0,
+            "total": 0
+        },
+        {
+            "id": "24907e",
+            "nombre": "Matthew Ma",
+            "debe": 0,
+            "recibe": 0,
+            "total": 0
+        },
+        {
+            "id": "ad3221",
+            "nombre": "Patricia Obrien",
+            "debe": 0,
+            "recibe": 0,
+            "total": 0
+        }
+    ]
+}
