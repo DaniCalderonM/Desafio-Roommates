@@ -1,9 +1,8 @@
 const fs = require('fs');
 const uuid = require('uuid');
 const axios = require('axios');
-
+const { getGastos } = require('./gastos.js');
 const cRoommates = __dirname + '/data/roommates.json';
-const cGastos = __dirname + '/data/gastos.json';
 
 const obtenerRoommate = async () => {
     try {
@@ -16,26 +15,26 @@ const obtenerRoommate = async () => {
     }
 }
 
+const getRoommates = async () => {
+    const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
+    return roommatesJSON;
+}
+
 const postRoommate = async () => {
     const roommate = await obtenerRoommate();
     const nuevoRoommate = { id: uuid.v4().slice(30), nombre: roommate, debe: 0, recibe: 0, total: 0 };
-    const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
+    const roommatesJSON = getRoommates();
     roommatesJSON.roommates.push(nuevoRoommate);
     // Escribir el archivo JSON con la agregacion realizada
     fs.writeFileSync(cRoommates, JSON.stringify(roommatesJSON));
     return roommatesJSON;
 }
 
-const getRoommates = async () => {
-    const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
-    return roommatesJSON;
-}
-
 const putCuentas = async () => {
     try {
         // Obtener a los roommates y los gastos
-        const roommatesJSON = JSON.parse(fs.readFileSync(cRoommates, "utf8"));
-        const gastosJSON = JSON.parse(fs.readFileSync(cGastos, "utf8"));
+        const roommatesJSON = await getRoommates();
+        const gastosJSON = await getGastos();
         const roommates = roommatesJSON.roommates;
         const gastos = gastosJSON.gastos;
 
@@ -68,6 +67,5 @@ const putCuentas = async () => {
         console.log("Error al actualizar cuentas: ", error.message);
     }
 }
-
 
 module.exports = { postRoommate, getRoommates, putCuentas };

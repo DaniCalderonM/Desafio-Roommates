@@ -11,6 +11,7 @@ const PORT = 3000;
 app.use(express.json());
 
 const cGastos = __dirname + '/data/gastos.json';
+
 //1. Devolver el documento HTML disponible
 app.get("/", (req, res) => {
     try {
