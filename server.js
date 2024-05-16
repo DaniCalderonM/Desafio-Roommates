@@ -15,6 +15,7 @@ const cGastos = __dirname + '/data/gastos.json';
 //1. Devolver el documento HTML disponible
 app.get("/", (req, res) => {
     try {
+        console.log("Archivo html obtenido correctamente");
         return res.sendFile(__dirname + '/index.html');
     } catch (error) {
         console.log("Error del servidor: ", error.message);
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.get('/roommates', async (req, res) => {
     try {
         const respuesta = await getRoommates();
+        console.log("Roommates obtenidos correctamente");
         return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -39,6 +41,7 @@ app.post('/roommate', async (req, res) => {
         const respuesta = await postRoommate();
         // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
+        console.log("Roommate agregado correctamente");
         return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -50,6 +53,7 @@ app.post('/roommate', async (req, res) => {
 app.get('/gastos', async (req, res) => {
     try {
         const respuesta = await getGastos();
+        console.log("Gastos obtenidos correctamente");
         return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -63,12 +67,14 @@ app.post('/gasto', async (req, res) => {
         const { roommate, descripcion, monto } = req.body;
         // Verificar si se proporcionan los datos del req.body
         if (!roommate || !descripcion || !monto) {
+            console.log("status 400: Debe proporcionar el roommate, la descripcion y el monto");
             return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
         }
 
         const respuesta = await postGasto(roommate, descripcion, monto);
         // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
+        console.log("Gasto ingresado correctamente");
         return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
@@ -84,10 +90,12 @@ app.put('/gasto', async (req, res) => {
 
         // Verificar si se proporciona el id en la consulta
         if (!id) {
+            console.log("status 400: Debe proporcionar un ID");
             return res.status(400).send("Debe proporcionar un ID");
         }
         // Verificar si se proporcionan los datos del req.body
         if (!roommate || !descripcion || !monto) {
+            console.log("status 400: Debe proporcionar el roommate, la descripcion y el monto");
             return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
         }
 
@@ -95,18 +103,18 @@ app.put('/gasto', async (req, res) => {
         const gastos = resultado.gastos;
 
         // Verificar si el gasto con el id proporcionado existe
-        const buscarId = buscarPorId(gastos, id)
-        if (buscarId == -1) {
-            console.log("Gasto no encontrado");
+        const indiceId = buscarPorId(gastos, id)
+        if (indiceId == -1) {
+            console.log("status 404: Gasto no encontrado");
             return res.status(404).send("Gasto no encontrado");
         } else {
             // Actualizar los datos del gasto
-            gastos[buscarId] = { id, roommate, descripcion, monto };
+            gastos[indiceId] = { id, roommate, descripcion, monto };
             // Escribir el archivo JSON con la modificacion realizada
             fs.writeFileSync(cGastos, JSON.stringify(resultado));
             // Se llama a la funcion para actualizar las cuentas
             await putCuentas();
-            console.log("Datos actualizados correctamente:", gastos[buscarId]);
+            console.log("Datos actualizados correctamente: ", gastos[indiceId]);
             return res.status(200).send(resultado);
         }
     } catch (error) {
@@ -121,13 +129,15 @@ app.delete('/gasto', async (req, res) => {
         const { id } = req.query;
         // Verificar si se proporciono el id
         if (!id) {
+            console.log("status 400: Debe proporcionar un ID")
             return res.status(400).send("Debe proporcionar un ID");
         }
         const resultado = await getGastos();
         const gastos = resultado.gastos;
         // Verificar si el gasto con el id proporcionado existe
-        const buscarId = buscarPorId(gastos, id)
-        if (buscarId == -1) {
+        const indiceId = buscarPorId(gastos, id)
+        if (indiceId == -1) {
+            console.log("status 404: El gasto con el ID proporcionado no existe")
             return res.status(404).send("El gasto con el ID proporcionado no existe");
         }
         // Eliminar el gasto del arreglo
@@ -136,6 +146,7 @@ app.delete('/gasto', async (req, res) => {
         fs.writeFileSync(cGastos, JSON.stringify(resultado));
         // Se llama a la funcion para actualizar las cuentas
         await putCuentas();
+        console.log("Gasto eliminado correctamente")
         return res.status(200).send(resultado);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
