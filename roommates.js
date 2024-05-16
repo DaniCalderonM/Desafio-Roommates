@@ -49,7 +49,7 @@ const putCuentas = async () => {
             const montoPorRoommate = gasto.monto / roommates.length;
             roommates.forEach(roommate => {
                 if (roommate.nombre == gasto.roommate) {
-                    roommate.recibe += montoPorRoommate;
+                    roommate.recibe += montoPorRoommate * (roommates.length - 1);
                 } else {
                     roommate.debe += montoPorRoommate;
                 }
