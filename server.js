@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
         return res.sendFile(__dirname + '/index.html');
     } catch (error) {
         console.log("Error del servidor: ", error.message);
-        return res.status(500).send("Error del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -31,7 +31,7 @@ app.get('/roommates', async (req, res) => {
         return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -45,7 +45,7 @@ app.post('/roommate', async (req, res) => {
         return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -57,7 +57,7 @@ app.get('/gastos', async (req, res) => {
         return res.status(200).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -68,7 +68,7 @@ app.post('/gasto', async (req, res) => {
         // Verificar si se proporcionan los datos del req.body
         if (!roommate || !descripcion || !monto) {
             console.log("status 400: Debe proporcionar el roommate, la descripcion y el monto");
-            return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
+            return res.status(400).send({ message: "Debe proporcionar el roommate, la descripcion y el monto" });
         }
 
         const respuesta = await postGasto(roommate, descripcion, monto);
@@ -78,7 +78,7 @@ app.post('/gasto', async (req, res) => {
         return res.status(201).send(respuesta);
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -91,12 +91,12 @@ app.put('/gasto', async (req, res) => {
         // Verificar si se proporciona el id en la consulta
         if (!id) {
             console.log("status 400: Debe proporcionar un ID");
-            return res.status(400).send("Debe proporcionar un ID");
+            return res.status(400).send({ message: "Debe proporcionar un ID" });
         }
         // Verificar si se proporcionan los datos del req.body
         if (!roommate || !descripcion || !monto) {
             console.log("status 400: Debe proporcionar el roommate, la descripcion y el monto");
-            return res.status(400).send("Debe proporcionar el roommate, la descripcion y el monto");
+            return res.status(400).send({ message: "Debe proporcionar el roommate, la descripcion y el monto" });
         }
 
         const resultado = await getGastos();
@@ -106,7 +106,7 @@ app.put('/gasto', async (req, res) => {
         const indiceId = buscarPorId(gastos, id)
         if (indiceId == -1) {
             console.log("status 404: Gasto no encontrado");
-            return res.status(404).send("Gasto no encontrado");
+            return res.status(404).send({ message: "Gasto no encontrado" });
         } else {
             // Actualizar los datos del gasto
             gastos[indiceId] = { id, roommate, descripcion, monto };
@@ -119,7 +119,7 @@ app.put('/gasto', async (req, res) => {
         }
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
@@ -127,10 +127,10 @@ app.put('/gasto', async (req, res) => {
 app.delete('/gasto', async (req, res) => {
     try {
         const { id } = req.query;
-        // Verificar si se proporciono el id
+        // Verificar si se proporcionó el id
         if (!id) {
             console.log("status 400: Debe proporcionar un ID")
-            return res.status(400).send("Debe proporcionar un ID");
+            return res.status(400).send({ message: "Debe proporcionar un ID" });
         }
         const resultado = await getGastos();
         const gastos = resultado.gastos;
@@ -138,19 +138,19 @@ app.delete('/gasto', async (req, res) => {
         const indiceId = buscarPorId(gastos, id)
         if (indiceId == -1) {
             console.log("status 404: El gasto con el ID proporcionado no existe")
-            return res.status(404).send("El gasto con el ID proporcionado no existe");
+            return res.status(404).send({ message: "El gasto con el ID proporcionado no existe" });
         }
         // Eliminar el gasto del arreglo
         resultado.gastos = gastos.filter((g) => g.id !== id);
         // Escribir el archivo JSON con la eliminacion realizada
         fs.writeFileSync(cGastos, JSON.stringify(resultado));
-        // Se llama a la funcion para actualizar las cuentas
+        // Se llama a la función para actualizar las cuentas
         await putCuentas();
         console.log("Gasto eliminado correctamente")
-        return res.status(200).send(resultado);
+        return res.status(200).send({ message: "Gasto eliminado correctamente" });
     } catch (error) {
         console.log("Error interno del servidor: ", error.message);
-        return res.status(500).send("Error interno del servidor: " + error.message);
+        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
     }
 });
 
