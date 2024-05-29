@@ -1,6 +1,7 @@
 // Importacion
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors')
 const { postRoommate, getRoommates, putCuentas } = require('./roommates.js');
 const { getGastos, postGasto, buscarPorId } = require('./gastos.js');
 // Instancia de express
@@ -9,19 +10,20 @@ const PORT = 3000;
 
 // Middleware para enviar respuestas json
 app.use(express.json());
+app.use(cors());
 
 const cGastos = __dirname + '/data/gastos.json';
 
 //1. Devolver el documento HTML disponible
-app.get("/", (req, res) => {
-    try {
-        console.log("Archivo html obtenido correctamente");
-        return res.sendFile(__dirname + '/index.html');
-    } catch (error) {
-        console.log("Error del servidor: ", error.message);
-        return res.status(500).send({ message: "Error interno del servidor: " + error.message });
-    }
-});
+// app.get("/", (req, res) => {
+//     try {
+//         console.log("Archivo html obtenido correctamente");
+//         return res.sendFile(__dirname + '/index.html');
+//     } catch (error) {
+//         console.log("Error del servidor: ", error.message);
+//         return res.status(500).send({ message: "Error interno del servidor: " + error.message });
+//     }
+// });
 
 //2. Devolver a todos los roommates almacenados en roommates.json
 app.get('/roommates', async (req, res) => {
